@@ -12,18 +12,21 @@ datasource db {
 
 
 model Books {
-  books_id    Int      @id @default(autoincrement())
+  id    Int      @id @default(autoincrement())
   books_status  Boolean
   books_price Int   
   vendor_code Int 
   library_name String
+  publisher Publisher @relation(fields: [publisherId], references: [id])
+  publisherId Int
 }
 
 model Publisher {
-  publisher_code    String      @id
+  id Int @id @default(autoincrement())
+  publisher_code    String 
   publisher_name  String
   publisher_country String   
-  books_id Int
+  books Books[] 
 }
 
 model Author {

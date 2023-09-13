@@ -6,6 +6,8 @@ const app = express();
 
 app.use(express.json());
 
+//Books....
+
 app.get('/books', async (req, res) => {
     console.log(req)
     const books = await prisma.books.findMany();
@@ -64,25 +66,64 @@ app.delete("/books/:id", async (req, res) => {
 }
 );
 
+//Publisher......
+app.get('/Publisher', async (req, res) => {
+    console.log(req)
+    const Publisher = await prisma.publisher.findMany();
+    console.log(Publisher);
+    res.json(Publisher)
+});
 
-// app.post("/post", async (req, res) => {
-//     const user = await prisma.books.create({
-//         data: {
-//             username: req.body.username,
-//             email: req.body.email,
-//             password: req.body.password,
-//             profile_picture: req.body.profile_picture,
-//             bio: req.body.bio,
-//             location: req.body.location,
-//             follower_count: req.body.follower_count,
-//             following_count: req.body.following_count,
-//         },
-//     });
-//     console.log(user);
-//     res.json(user);
-// }
-// );
 
+app.post('/Publisher', async (req, res) => {
+    const Publisher = await prisma.publisher.create({
+        data:{
+            publisher_code:req.body.publisher_code,
+            publisher_name:req.body.publisher_name,
+            publisher_country:req.body.publisher_country,
+            books_id:req.body.books_id
+        }
+    });
+
+    console.log(Publisher);
+    res.json(Publisher)
+});
+
+app.put("/Publisher/:id", async (req, res) => {
+    try {
+        const updatedUser = await prisma.publisher.update({
+            where: {
+                id: parseInt(req.params.id),
+            },
+            data: {
+                publisher_code:req.body.publisher_code,
+                publisher_name:req.body.publisher_name,
+                publisher_country:req.body.publisher_country,
+                books_id:req.body.books_id
+            },
+        });
+        res.json(updatedUser);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "An error occurred while updating the user." });
+    }
+}
+);
+
+app.delete("/Publisher/:id", async (req, res) => {
+    try {
+        const deletedUser = await prisma.publisher.delete({
+            where: {
+                id: parseInt(req.params.id),
+            },
+        });
+        res.json(deletedUser);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "An error occurred while deleting the user." });
+    }
+}
+);
 
 
 app.listen(3000, () => {

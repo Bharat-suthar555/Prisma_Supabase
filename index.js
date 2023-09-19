@@ -1,11 +1,12 @@
 const express = require('express');
 const { PrismaClient } =  require('@prisma/client')
+const cors = require('cors')
 
 const prisma = new PrismaClient();
 const app = express();
 
 app.use(express.json());
-
+app.use(cors())
 //Books....
 
 app.get('/books', async (req, res) => {
@@ -16,17 +17,18 @@ app.get('/books', async (req, res) => {
 });
 
 
-app.post('/books', async (req, res) => {
+app.post('/createbooksData', async (req, res) => {
     const books = await prisma.books.create({
         data:{
             books_status:req.body.books_status,
             vendor_code:req.body.vendor_code,
             books_price:req.body.books_price,
-            library_name:req.body.library_name
+            library_name:req.body.library_name,
+            publisherId:req.body.publisherId
         }
     });
 
-    console.log(books);
+    console.log("Books",books);
     res.json(books)
 });
 
@@ -75,7 +77,7 @@ app.get('/Publisher', async (req, res) => {
 });
 
 
-app.post('/Publisher', async (req, res) => {
+app.post('/createPublisher', async (req, res) => {
     const Publisher = await prisma.publisher.create({
         data:{
             publisher_code:req.body.publisher_code,
@@ -126,6 +128,6 @@ app.delete("/Publisher/:id", async (req, res) => {
 );
 
 
-app.listen(3000, () => {
+app.listen(3500, () => {
     console.log("server started at port 3000");
 });

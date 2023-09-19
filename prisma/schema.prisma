@@ -21,6 +21,14 @@ model Books {
   publisherId Int
 }
 
+model book_data {
+  id    Int      @id @default(autoincrement())
+  title  String
+  stationary String   
+  price String
+  image String
+}
+
 model Publisher {
   id Int @id @default(autoincrement())
   publisher_code    String 
